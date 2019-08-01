@@ -1,4 +1,4 @@
-function [ staticSHIP ] = CalStaticCoef( shipName )
+function [ staticSHIP ] = CalStaticCoef( shipName, fileOutput )
 % To write the ".SHIP" file for the input of simulation model.
 % 2019-07-20
 % Brief instructions
@@ -15,15 +15,9 @@ load(shipMatFile);
 %make file path
 staticSHIP = ['         | --- writing all static coef to result/',shipName,'.SHIP'];%output information
 disp(staticSHIP);
-timeCreate=datevec(datestr(now));
-month = num2str(timeCreate(2));
-day = num2str(timeCreate(3));
-hor = num2str(timeCreate(4));
-mint = num2str(timeCreate(5));
-secd = num2str(timeCreate(6));
-newFolder = ['result/',shipName,'_',month,'_',day,'_',hor,'_',mint,'_',secd];
-if exist(newFolder) == false; mkdir(newFolder); end
-outputPath = [newFolder,'/',shipName,'.SHIP'];
+
+if exist(fileOutput) == false; mkdir(fileOutput); end
+outputPath = [fileOutput,'/',shipName,'.SHIP'];
 
 
 %cal parameters if zero
@@ -85,72 +79,72 @@ end
 %open and write
 fileSHIP = fopen(outputPath,'w');
 %write '.SHIP' file
-fprintf(fileSHIP,'%d #Loading Condition \n',loading);
-fprintf(fileSHIP,'%d #ShipType \n',shiptype);
-fprintf(fileSHIP,'%f #Volume\n',Vol); 
-fprintf(fileSHIP,'%f #Displacement\n',m);  
-fprintf(fileSHIP,'%f #Lpp\n',Lpp);  
-fprintf(fileSHIP,'%f #Loa\n',Loa);  
-fprintf(fileSHIP,'%f #B\n',B);  	
-fprintf(fileSHIP,'%f #Depth\n',D);  
-fprintf(fileSHIP,'%f #DraftFore\n',dF);  
-fprintf(fileSHIP,'%f #DraftAft\n',dA);
-fprintf(fileSHIP,'%f #DraftMean\n',dM);  
-fprintf(fileSHIP,'%f #Trim\n',Trim);  
-fprintf(fileSHIP,'%f #xB\n',xB);  
-fprintf(fileSHIP,'%f #xF\n',xf);  
-fprintf(fileSHIP,'%f #xG\n',xG);  
-fprintf(fileSHIP,'%f #zH\n',zH);%--
-fprintf(fileSHIP,'%f #a\n',a_roll); %-- 	
-fprintf(fileSHIP,'%f #b\n',b_roll);  %--
-fprintf(fileSHIP,'%f #KB\n',KB);  %-- 
-fprintf(fileSHIP,'%f #TKM\n',GM_T);  
-fprintf(fileSHIP,'%f #LKM\n',GM_L);  %est
-fprintf(fileSHIP,'%f #WSA\n',WSA);  %est
-fprintf(fileSHIP,'%f #WPA\n',WPA);  
-fprintf(fileSHIP,'%f #MIDA\n',MIDA);  
-fprintf(fileSHIP,'%f #Cb\n',Cb);  
-fprintf(fileSHIP,'%f #Cp\n',Cp);  %可互相转换
-fprintf(fileSHIP,'%f #Cw\n',Cw);  
-fprintf(fileSHIP,'%f #Cm\n',Cm);  %可互相转换
-fprintf(fileSHIP,'%f #KG\n',zG);  
-fprintf(fileSHIP,'%f #G0M\n',G0M);  
-fprintf(fileSHIP,'%f #Dp\n',Dp);  % necessary
-fprintf(fileSHIP,'%f #Znum\n',Znum);  
-fprintf(fileSHIP,'%f #Pitch\n',Pitch);  % necessary
-fprintf(fileSHIP,'%f #Panratio\n',PanRatio);
-fprintf(fileSHIP,'%f #Pitchratio\n',PitchRatio); 
-fprintf(fileSHIP,'%f #wp0;\n',wp0); %est
-fprintf(fileSHIP,'%f #tp0;\n',tp0);  %est
-fprintf(fileSHIP,'%f #k2;\n',k2);  % necessary
-fprintf(fileSHIP,'%f #k1;\n',k1);  % necessary
-fprintf(fileSHIP,'%f #k0;\n',k0);  % necessary
-fprintf(fileSHIP,'%f #lP;\n',lP);  % -0.5
-fprintf(fileSHIP,'%f #zP;\n',zP);  %???est 
-fprintf(fileSHIP,'%f #HR\n',HR);  % necessary
-fprintf(fileSHIP,'%f #AR\n',AR);  % necessary
-fprintf(fileSHIP,'%f #BR\n',BR);  % necessary
-fprintf(fileSHIP,'%f #lamdaR\n',lamdaR); %est 
-fprintf(fileSHIP,'%f #f_alfa\n',f_alfa); %est 
-fprintf(fileSHIP,'%f #tR\n',tR);  %est 
-fprintf(fileSHIP,'%f #aH\n',aH);  %est 
-fprintf(fileSHIP,'%f #xH\n',xH);  %est 
-fprintf(fileSHIP,'%f #xR\n',xR);  %-0.5
-fprintf(fileSHIP,'%f #zR\n',zR);  %??est 
-fprintf(fileSHIP,'%f #lR\n',lR);  %est -0.9
-fprintf(fileSHIP,'%f #kappa\n',kappa); %est 
-fprintf(fileSHIP,'%f #eta\n',eta);  %est
-fprintf(fileSHIP,'%f #epsilon\n',epsilon);%est
-fprintf(fileSHIP,'%f #gammaA\n',gammaA);%est
-fprintf(fileSHIP,'%f #gRminus\n',gRminus);%est
-fprintf(fileSHIP,'%f #gRplus\n',gRplus); %est
-fprintf(fileSHIP,'%f #AF\n',AF);  %est 
-fprintf(fileSHIP,'%f #AA\n',AA);  %est 
-fprintf(fileSHIP,'%f #AB\n',AB);  %est 
-fprintf(fileSHIP,'%f #centAA\n',centAA); 
-fprintf(fileSHIP,'%f #centAB\n',centAB); 
-fprintf(fileSHIP,'%f #zAB\n',zAB); 
-fprintf(fileSHIP,'%f #R0\n', R0);
+fprintf(fileSHIP,'%d \t #Loading Condition \n',loading);
+fprintf(fileSHIP,'%d \t#ShipType \n',shiptype);
+fprintf(fileSHIP,'%.4f \t#Volume\n',Vol); 
+fprintf(fileSHIP,'%.4f \t#Displacement\n',m);  
+fprintf(fileSHIP,'%.4f \t#Lpp\n',Lpp);  
+fprintf(fileSHIP,'%.4f \t#Loa\n',Loa);  
+fprintf(fileSHIP,'%.4f \t#B\n',B);  	
+fprintf(fileSHIP,'%.4f \t#Depth\n',D);  
+fprintf(fileSHIP,'%.4f \t#DraftFore\n',dF);  
+fprintf(fileSHIP,'%.4f \t#DraftAft\n',dA);
+fprintf(fileSHIP,'%.4f \t#DraftMean\n',dM);  
+fprintf(fileSHIP,'%.4f \t#Trim\n',Trim);  
+fprintf(fileSHIP,'%.4f \t#xB\n',xB);  
+fprintf(fileSHIP,'%.4f \t#xF\n',xf);  
+fprintf(fileSHIP,'%.4f \t#xG\n',xG);  
+fprintf(fileSHIP,'%.4f \t#zH\n',zH);%--只能从 yasu估算
+fprintf(fileSHIP,'%.4f \t#a\n',a_roll); %-- 	只能从 yasu估算
+fprintf(fileSHIP,'%.4f \t#b\n',b_roll);  %--只能从 yasu估算	
+fprintf(fileSHIP,'%.4f \t#KB\n',KB);  %-- 浮心高度
+fprintf(fileSHIP,'%.4f \t#TKM\n',GM_T);  
+fprintf(fileSHIP,'%.4f \t#LKM\n',GM_L);  %est
+fprintf(fileSHIP,'%.4f \t#WSA\n',WSA);  %est
+fprintf(fileSHIP,'%.4f \t#WPA\n',WPA);  
+fprintf(fileSHIP,'%.4f \t#MIDA\n',MIDA);  
+fprintf(fileSHIP,'%.4f \t#Cb\n',Cb);  
+fprintf(fileSHIP,'%.4f \t#Cp\n',Cp);  %可互相转换
+fprintf(fileSHIP,'%.4f \t#Cw\n',Cw);  
+fprintf(fileSHIP,'%.4f \t#Cm\n',Cm);  %可互相转换
+fprintf(fileSHIP,'%.4f \t#KG\n',zG);  
+fprintf(fileSHIP,'%.4f \t#G0M\n',G0M);  
+fprintf(fileSHIP,'%.4f \t#Dp\n',Dp);  % necessary
+fprintf(fileSHIP,'%.4f \t#Znum\n',Znum);  
+fprintf(fileSHIP,'%.4f \t#Pitch\n',Pitch);  % necessary
+fprintf(fileSHIP,'%.4f \t#Panratio\n',PanRatio);
+fprintf(fileSHIP,'%.4f \t#Pitchratio\n',PitchRatio); 
+fprintf(fileSHIP,'%.4f \t#wp0;\n',wp0); %est
+fprintf(fileSHIP,'%.4f \t#tp0;\n',tp0);  %est
+fprintf(fileSHIP,'%.4f \t#k2;\n',k2);  % necessary
+fprintf(fileSHIP,'%.4f \t#k1;\n',k1);  % necessary
+fprintf(fileSHIP,'%.4f \t#k0;\n',k0);  % necessary
+fprintf(fileSHIP,'%.4f \t#lP;\n',lP);  % -0.5
+fprintf(fileSHIP,'%.4f \t#zP;\n',zP);  %???est 只能从 yasu估算
+fprintf(fileSHIP,'%.4f \t#HR\n',HR);  % necessary
+fprintf(fileSHIP,'%.4f \t#AR\n',AR);  % necessary
+fprintf(fileSHIP,'%.4f \t#BR\n',BR);  % necessary
+fprintf(fileSHIP,'%.4f \t#lamdaR\n',lamdaR); %est 
+fprintf(fileSHIP,'%.4f \t#f_alfa\n',f_alfa); %est 
+fprintf(fileSHIP,'%.4f \t#tR\n',tR);  %est 
+fprintf(fileSHIP,'%.4f \t#aH\n',aH);  %est 
+fprintf(fileSHIP,'%.4f \t#xH\n',xH);  %est 
+fprintf(fileSHIP,'%.4f \t#xR\n',xR);  %-0.5
+fprintf(fileSHIP,'%.4f \t#zR\n',zR);  %??est 只能从 yasu估算
+fprintf(fileSHIP,'%.4f \t#lR\n',lR);  %est -0.9
+fprintf(fileSHIP,'%.4f \t#kappa\n',kappa); %est 
+fprintf(fileSHIP,'%.4f \t#eta\n',eta);  %est
+fprintf(fileSHIP,'%.4f \t#epsilon\n',epsilon);%est
+fprintf(fileSHIP,'%.4f \t#gammaA\n',gammaA);%est
+fprintf(fileSHIP,'%.4f \t#gRminus\n',gRminus);%est
+fprintf(fileSHIP,'%.4f \t#gRplus\n',gRplus); %est
+fprintf(fileSHIP,'%.4f \t#AF\n',AF);  %est 如果没有只能从形状粗略估算
+fprintf(fileSHIP,'%.4f \t#AA\n',AA);  %est 如果没有只能从形状粗略估算
+fprintf(fileSHIP,'%.4f \t#AB\n',AB);  %est 如果没有只能从形状粗略估算
+fprintf(fileSHIP,'%.4f \t#centAA\n',centAA); 
+fprintf(fileSHIP,'%.4f \t#centAB\n',centAB); 
+fprintf(fileSHIP,'%.4f \t#zAB\n',zAB); 
+fprintf(fileSHIP,'%.4f \t#R0', R0);
 fclose(fileSHIP);
 
 
